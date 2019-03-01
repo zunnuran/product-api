@@ -1,32 +1,32 @@
 <?php
 if(file_exists("../config.php")){
-    include ("../config.php");
+    include("../config.php");
 }
 else{
-    include ("config.php");
+    include ("../api/config.php");
 }
 
 class product extends config {
-    public $Id;
-    public $name;
-    public $price;
-    public $color;
-    public $creted_at;
-    public $updated_at;
+//    public $Id;
+//    public $name;
+//    public $price;
+//    public $color;
+//    public $creted_at;
+//    public $updated_at;
 
-    public function addProduct($post_request) {
+    public function addProduct($product_name, $product_price, $product_color) {
         $error = '';
 
-        $product_name = $post_request['name'];
-        $price = $post_request['price'];
-        $color = $post_request['color'];
+//        $product_name = $post_request['name'];
+//        $price = $post_request['price'];
+//        $color = $post_request['color'];
         if(strlen($product_name)>100 || strlen($product_name)<3){
             $error .= 'Product name must be between 3-100 <br>';
         }
-        if(round($price, 2) < 0.01){
+        if(round($product_price, 2) < 0.01){
             $error .= 'Product price must be at least 0.01 <br>';
         }
-        if(strlen($color)>25){
+        if(strlen($product_color)>25){
             $error .= 'Product color must be between 3-25 <br>';
         }
         if($error!='')
@@ -35,7 +35,7 @@ class product extends config {
         }
 
         $query = $this->conn->prepare("INSERT INTO products (product_name, price, color) VALUES (?,?,?)");
-        $query->bind_param("sds", $product_name, $price, $color);
+        $query->bind_param("sds", $product_name, $product_price, $product_color);
         $query->execute();
         if($query->affected_rows>0)
         {
@@ -45,12 +45,12 @@ class product extends config {
             return 0;
     }
 
-    public function updateProduct($post_request) {
+    public function updateProduct($Id, $product_name, $product_price, $product_color) {
         $error = '';
-        $Id = $post_request['id'];
-        $product_name = $post_request['name'];
-        $price = $post_request['price'];
-        $color = $post_request['color'];
+//        $Id = $post_request['id'];
+//        $product_name = $post_request['name'];
+//        $price = $post_request['price'];
+//        $color = $post_request['color'];
 
         if(round($Id)<0){
             $error .= 'Unable to update product (Invalid product Id). <br>';
@@ -58,10 +58,10 @@ class product extends config {
         if(strlen($product_name)>100 || strlen($product_name)<3){
             $error .= 'Product name must be between 3-100 <br>';
         }
-        if(round($price, 2) < 0.01){
+        if(round($product_price, 2) < 0.01){
             $error .= 'Product price must be at least 0.01 <br>';
         }
-        if(strlen($color)>25){
+        if(strlen($product_color)>25){
             $error .= 'Product color must be max 25 <br>';
         }
         if($error!='')
@@ -69,7 +69,7 @@ class product extends config {
             return $error;
         }
         $query = $this->conn->prepare("UPDATE products SET product_name=?, price=?, color=? WHERE id = ?");
-        $query->bind_param("sdsi", $product_name, $price, $color, $Id);
+        $query->bind_param("sdsi", $product_name, $product_price, $product_color, $Id);
         $query->execute();
         if($query->affected_rows>0)
         {
@@ -104,6 +104,7 @@ class product extends config {
         else
             return false;
     }
+
     public function searchProduct($productName=""){
         $query = "";
         if($productName==""){

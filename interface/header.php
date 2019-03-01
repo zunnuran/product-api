@@ -10,3 +10,11 @@
     </title>
 </head>
 <body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../"><img src="assets/images/favicon.png" height="22"></a>
+            <a class="navbar-brand" href="../">Product API</a>
+        </div>
+    </div>
+</nav>
